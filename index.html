@@ -48,6 +48,8 @@
   }
   .fbtn:hover{opacity:1}
   .fbtn.active{opacity:1;border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+  .fbreak{flex-basis:100%;height:0}
+  .fbtn.small{font-size:11px;padding:4px 11px;font-weight:800}
   .wrap{max-width:760px;margin:0 auto;padding:14px 12px}
   .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;margin:4px 0 14px;color:var(--muted);font-weight:600}
   .legend span{display:inline-flex;align-items:center;gap:4px}
@@ -352,7 +354,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530001430';
+const BUILD = '20260530001657';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -490,12 +492,17 @@ let curStage='all';
 
 function buildFilters(){
   const f=document.getElementById('filters');
-  const btns=[['all','全ステージ','#444b57']]
-    .concat(Object.keys(STAGE).map(s=>[s,s,STAGE[s].c]))
-    .concat([['check','📸 写真チェック要','var(--check)']]);
-  f.innerHTML=btns.map(([key,label,col])=>
-    `<div class="fbtn${key===curStage?' active':''}" data-stage="${key}" style="background:${col}">${label}</div>`
+  const venues=[['all','全ステージ','#444b57']]
+    .concat(Object.keys(STAGE).map(s=>[s,s,STAGE[s].c]));
+  const attrs=[
+    ['check','📸 写真チェック要','var(--check)'],
+    ['share','💾 データ共有希望','var(--share)'],
+    ['ng','⚠ 撮影NG注意','var(--ng)'],
+  ];
+  const btnHtml=(arr,extra)=>arr.map(([key,label,col])=>
+    `<div class="fbtn${extra}${key===curStage?' active':''}" data-stage="${key}" style="background:${col}">${label}</div>`
   ).join('');
+  f.innerHTML = btnHtml(venues,'') + '<div class="fbreak"></div>' + btnHtml(attrs,' small');
   f.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{
     curStage=b.dataset.stage;
     buildFilters();
@@ -507,6 +514,8 @@ function render(){
   const list=document.getElementById('list');
   let rows=DATA.slice().sort((a,b)=>toMin(a.e)-toMin(b.e));
   if(curStage==='check') rows=rows.filter(d=>d.check);
+  else if(curStage==='share') rows=rows.filter(d=>d.share);
+  else if(curStage==='ng') rows=rows.filter(d=>d.ng);
   else if(curStage!=='all') rows=rows.filter(d=>d.stage===curStage);
   // 写真チェック要サマリー（表示中のステージに連動）
   const ck=rows.filter(d=>d.check);
@@ -514,9 +523,9 @@ function render(){
     <span class="lbl">📸 写真チェック要 ${ck.length}組</span>
     ${ck.map(d=>`${d.s}–${d.e} <b>${d.name}</b>(${d.stage})`).join(' ／ ')}
   </div>` : '';
+  const HEADMAP = {check:'📸 写真チェック要', share:'💾 データ共有希望', ng:'⚠ 撮影NG注意'};
   const head = curStage==='all' ? '終了時刻順（＝速報投稿の目安）'
-    : curStage==='check' ? '📸 写真チェック要 ／ 終了時刻順'
-    : `${curStage} ／ 終了時刻順`;
+    : (HEADMAP[curStage] ? HEADMAP[curStage] : curStage) + ' ／ 終了時刻順';
   list.innerHTML=`<div class="group-h">${head}</div>`+sum+rows.map(card).join('');
   applyPosts();
   applyDropbox();
