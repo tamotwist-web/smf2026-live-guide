@@ -352,7 +352,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530000548';
+const BUILD = '20260530001430';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -491,7 +491,8 @@ let curStage='all';
 function buildFilters(){
   const f=document.getElementById('filters');
   const btns=[['all','全ステージ','#444b57']]
-    .concat(Object.keys(STAGE).map(s=>[s,s,STAGE[s].c]));
+    .concat(Object.keys(STAGE).map(s=>[s,s,STAGE[s].c]))
+    .concat([['check','📸 写真チェック要','var(--check)']]);
   f.innerHTML=btns.map(([key,label,col])=>
     `<div class="fbtn${key===curStage?' active':''}" data-stage="${key}" style="background:${col}">${label}</div>`
   ).join('');
@@ -505,14 +506,17 @@ function buildFilters(){
 function render(){
   const list=document.getElementById('list');
   let rows=DATA.slice().sort((a,b)=>toMin(a.e)-toMin(b.e));
-  if(curStage!=='all') rows=rows.filter(d=>d.stage===curStage);
+  if(curStage==='check') rows=rows.filter(d=>d.check);
+  else if(curStage!=='all') rows=rows.filter(d=>d.stage===curStage);
   // 写真チェック要サマリー（表示中のステージに連動）
   const ck=rows.filter(d=>d.check);
   const sum= ck.length ? `<div class="checkbox" style="margin:0 0 12px">
     <span class="lbl">📸 写真チェック要 ${ck.length}組</span>
     ${ck.map(d=>`${d.s}–${d.e} <b>${d.name}</b>(${d.stage})`).join(' ／ ')}
   </div>` : '';
-  const head = curStage==='all' ? '終了時刻順（＝速報投稿の目安）' : `${curStage} ／ 終了時刻順`;
+  const head = curStage==='all' ? '終了時刻順（＝速報投稿の目安）'
+    : curStage==='check' ? '📸 写真チェック要 ／ 終了時刻順'
+    : `${curStage} ／ 終了時刻順`;
   list.innerHTML=`<div class="group-h">${head}</div>`+sum+rows.map(card).join('');
   applyPosts();
   applyDropbox();
