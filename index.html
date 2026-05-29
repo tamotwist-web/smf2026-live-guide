@@ -366,7 +366,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530003001';
+const BUILD = '20260530003052';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -484,7 +484,7 @@ function card(d){
         <div class="name">${d.name}</div>
         ${rep}
         ${d.report==='na' ? '' : `<div class="dbx" data-dir="${(d.dir||'').replace(/"/g,'&quot;')}"><span class="box">✓</span><span class="dbxlabel">DROPBOX自動巡回</span><span class="cnt"></span></div>`}
-        ${d.report==='na' ? '' : `<div class="sel" data-name="${(d.name||'').replace(/"/g,'&quot;')}"><span class="box">✓</span><span class="sellabel">DROPBOX自動選定</span><span class="cnt"></span></div>`}
+        ${d.report==='na' ? '' : `<div class="sel" data-name="${(d.name||'').replace(/"/g,'&quot;')}"><span class="box">✓</span><span class="sellabel">PHOTO自動選定</span><span class="cnt"></span></div>`}
       </div>
       <div class="col col3">
         <div class="col-h">撮影リクエスト / 注意</div>
@@ -580,7 +580,7 @@ function applySelected(){
     const lbl = el.querySelector('.sellabel');
     const cnt = el.querySelector('.cnt');
     if(n>0){ lbl.textContent='選定済'; cnt.textContent=`${n}枚`; }
-    else   { lbl.textContent='DROPBOX自動選定'; cnt.textContent=''; }
+    else   { lbl.textContent='PHOTO自動選定'; cnt.textContent=''; }
   });
 }
 async function fetchSelected(){
