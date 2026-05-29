@@ -176,7 +176,7 @@
 
   @media(max-width:560px){
     /* スマホ：左=終了時刻/ステージ、右=詳細 の2カラム構造を維持 */
-    .card .body{grid-template-columns:80px 1fr;gap:6px 11px;align-items:start}
+    .card .body{grid-template-columns:96px 1fr;gap:6px 11px;align-items:start}
     .col-h{display:none}
     .col1{grid-column:1;grid-row:1 / span 3}
     .col2{grid-column:2;grid-row:1;align-items:flex-start}
@@ -184,7 +184,9 @@
     .col4{grid-column:2;grid-row:3;flex-direction:row;flex-wrap:wrap;gap:6px}
     .col4 .post{flex:1;justify-content:center}
     .col4 .donebadge{flex-basis:100%}
+    /* スマホは開始時刻も終了時刻と同じ大きさに */
     .endtime .big{font-size:23px}
+    .endtime .start{font-size:23px;font-weight:900;white-space:nowrap}
     .rep,.dbx{align-self:flex-start}
     .name{font-size:16px}
   }
@@ -350,7 +352,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260529232349';
+const BUILD = '20260530000426';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
