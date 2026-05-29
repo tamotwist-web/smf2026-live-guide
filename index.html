@@ -31,7 +31,7 @@
   /* ステージ絞り込みボタン */
   .filters{
     position:sticky;top:74px;z-index:40;
-    display:flex;gap:7px;flex-wrap:wrap;padding:11px 14px;
+    display:flex;justify-content:center;gap:7px;flex-wrap:wrap;padding:11px 14px;
     background:#0c1116;border-bottom:1px solid var(--line);
   }
   .fbtn{
@@ -106,14 +106,12 @@
   .post.x.on .box{background:#111;border-color:#111;color:#fff}
   .post.ig.on{background:linear-gradient(45deg,#e1306c,#fda437);border-color:#e1306c;color:#fff}
   .post.ig.on .box{background:#fff;border-color:#fff;color:#e1306c}
-  /* 両方完了：薄くせず、緑のふち＋完了バッジでハッキリ示す */
-  .card.posted{border:2px solid #3ee88f !important;box-shadow:0 0 0 3px rgba(62,232,143,.3) !important}
-  .card.posted .body{background:linear-gradient(90deg,rgba(62,232,143,.16),transparent 70%) !important}
+  /* 両方完了：カードを半透明にしつつ「投稿完了」バッジを表示 */
+  .card.posted{opacity:.5}
   .donebadge{
     display:none;align-items:center;justify-content:center;gap:5px;
     font-size:12px;font-weight:900;color:#04220f;background:#3ee88f;
     padding:5px 8px;border-radius:7px;letter-spacing:.5px;
-    box-shadow:0 1px 4px rgba(62,232,143,.5);
   }
   .card.posted .donebadge{display:flex}
 
