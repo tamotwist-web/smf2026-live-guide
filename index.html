@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>SENDAI MUSIC FUSE 2026 ライブ速報テーブルプログラム</title>
+<title>SENDAI MUSIC FUSE 2026 ライブ速報テーブル共有プログラム</title>
 <style>
   :root{
     --rensa:#E89B2B; --darwin:#E96D2E; --macana:#E0392F;
@@ -231,7 +231,7 @@
 <body>
 <div id="gate">
   <div class="gate-box">
-    <div class="gate-ttl">SENDAI MUSIC FUSE 2026<br>ライブ速報テーブルプログラム</div>
+    <div class="gate-ttl">SENDAI MUSIC FUSE 2026<br>ライブ速報テーブル共有プログラム</div>
     <div class="gate-sub">合言葉を入力してください</div>
     <input id="gatePw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••">
     <div class="gate-btn" id="gateBtn">入る</div>
@@ -254,7 +254,7 @@
 })();
 </script>
 <header>
-  <div class="ttl">SENDAI MUSIC FUSE 2026 ／ ライブ速報テーブルプログラム</div>
+  <div class="ttl">SENDAI MUSIC FUSE 2026 ／ ライブ速報テーブル共有プログラム</div>
   <div class="sub">2026.05.30 SAT ・ Rensa / darwin / MACANA / ROCKATERIA / enn 2nd / enn 3rd</div>
   <div class="clock">
     <span class="now" id="clock">--:--</span>
@@ -345,7 +345,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260529231636';
+const BUILD = '20260529232020';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
