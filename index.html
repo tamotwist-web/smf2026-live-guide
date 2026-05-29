@@ -366,7 +366,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530013841';
+const BUILD = '20260530014752';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -424,7 +424,7 @@ function genCaption(name, stage, sns){
   const atags = ARTIST_TAGS[name] || ['#'+name.replace(/[ !?！？()（）]/g,'')];
   const ph = PHOTOG[stage] || {name:'', ig:'', x:''};
   const handle = (sns==='x') ? ph.x : ph.ig;
-  return ['SMF2026 Photo Report！！！', '', '-'+stage+'-', name, '', '#'+stageTag, ...atags, '#SMF', '#SMF2026', '#FUSE', '', 'Photo:'+ph.name, handle].join('\n');
+  return ['SENDAI MUSIC FUSE 2026 Photo Report！！！', '', '-'+stage+'-', name, '', '#'+stageTag, ...atags, '#SMF', '#SMF2026', '#FUSE', '', 'Photo:'+ph.name, handle].join('\n');
 }
 
 function card(d){
