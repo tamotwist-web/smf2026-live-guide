@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>SENDAI MUSIC FUSE 2026 ライブ速報テーブルプログラム</title>
 <style>
   :root{
@@ -338,6 +341,23 @@ const DATA = [
 
 const EVENT_DATE = '2026-05-30';
 const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
+
+/* ===== 自動更新（キャッシュ対策）=====
+   デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
+   値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
+const BUILD = '20260529231636';
+async function checkUpdate(){
+  try{
+    const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
+    if(!r.ok) return;
+    const v = (await r.text()).trim();
+    if(v && BUILD!=='__BUILD__' && v!==BUILD){
+      // 新バージョンあり → URLにバージョンを付けてキャッシュ回避で再読み込み
+      location.replace(location.pathname + '?v=' + encodeURIComponent(v));
+    }
+  }catch(e){ /* 取得失敗時は何もしない */ }
+}
+setInterval(checkUpdate, 60000); // 60秒ごとに更新チェック
 
 /* ===== 投稿テキスト生成 ===== */
 // 会場ハッシュタグ
