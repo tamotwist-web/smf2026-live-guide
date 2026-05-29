@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENDAI MUSIC FUSE 2026 ライブ速報ガイド</title>
+<style>
+  :root{
+    --rensa:#E89B2B; --darwin:#E96D2E; --macana:#E0392F;
+    --rock:#1B9E8E; --enn2:#EF8AA6; --enn3:#2E73B8;
+    --bg:#0f1419; --card:#2a3744; --card2:#35404e;
+    --txt:#ffffff; --muted:#c2cedb; --line:#475463;
+    --ng:#ff6b6b; --check:#ffb02e; --share:#b98cff; --ok:#3ecf8e;
+    --dbx:#2f7fff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    background:var(--bg);color:var(--txt);line-height:1.5;padding-bottom:60px;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(120deg,#0c5f55,#1B9E8E 45%,#7fd6c6);
+    color:#fff;padding:14px 16px;box-shadow:0 2px 14px rgba(0,0,0,.5);
+  }
+  header .ttl{font-size:18px;font-weight:800;letter-spacing:.5px}
+  header .sub{font-size:12px;opacity:.92;margin-top:2px}
+  .clock{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;}
+  .clock .now{font-size:13px;background:rgba(0,0,0,.28);padding:4px 10px;border-radius:20px;font-weight:700;color:#fff}
+  /* ステージ絞り込みボタン */
+  .filters{
+    position:sticky;top:74px;z-index:40;
+    display:flex;gap:7px;flex-wrap:wrap;padding:11px 14px;
+    background:#0c1116;border-bottom:1px solid var(--line);
+  }
+  .fbtn{
+    font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:20px;cursor:pointer;
+    color:#fff;border:2px solid transparent;background:var(--card2);opacity:.7;transition:.15s;
+  }
+  .fbtn:hover{opacity:1}
+  .fbtn.active{opacity:1;border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+  .wrap{max-width:760px;margin:0 auto;padding:14px 12px}
+  .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;margin:4px 0 14px;color:var(--muted);font-weight:600}
+  .legend span{display:inline-flex;align-items:center;gap:4px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  .group-h{font-size:13px;font-weight:800;color:var(--muted);margin:18px 4px 8px;letter-spacing:1px}
+
+  .card{
+    display:flex;background:var(--card);border-radius:12px;overflow:hidden;
+    margin-bottom:10px;border:1px solid var(--line);transition:.2s;
+  }
+  .card .bar{width:6px;flex-shrink:0}
+  /* 3カラム構成 */
+  .card .body{
+    flex:1;min-width:0;padding:11px 13px;
+    display:grid;grid-template-columns:92px minmax(115px,1fr) 1.5fr 96px;
+    gap:12px;align-items:start;
+  }
+  .col{min-width:0}
+  .col1{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+  .col2{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .col3{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .col-h{font-size:10px;font-weight:800;color:#9fb0c0;letter-spacing:.5px;text-transform:uppercase}
+  .time{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25}
+  /* 終了時刻を大きく表示 */
+  .endtime{display:flex;flex-direction:column;line-height:1}
+  .endtime .start{font-size:11px;color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+  .endtime .elabel{font-size:9.5px;color:var(--ok);font-weight:800;letter-spacing:.5px;margin-top:3px}
+  .endtime .big{font-size:27px;font-weight:900;color:var(--ok);font-variant-numeric:tabular-nums;line-height:1.05}
+  .stage{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;color:#fff;display:inline-block}
+  .name{font-size:17px;font-weight:800;word-break:break-word;line-height:1.25;color:var(--txt)}
+
+  /* 速報ステータス pill */
+  .rep{font-size:12.5px;font-weight:800;padding:4px 12px;border-radius:6px;white-space:nowrap}
+  .rep-yes{color:#04220f;background:#3ee88f}
+  .rep-no{color:#9aa6b2;background:#39434f;border:1px solid #4a5562}
+
+  /* DROPBOX格納インジケータ（速報○ありの下） */
+  .dbx{
+    display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;
+    padding:4px 9px;border-radius:6px;border:1px dashed #4a5562;color:#9fb0c0;background:#2b3440;white-space:nowrap;
+  }
+  .dbx .box{
+    width:16px;height:16px;border-radius:4px;border:2px solid #6a7785;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:transparent;
+  }
+  .dbx.on{color:#bcd6ff;background:rgba(47,127,255,.16);border:1px solid var(--dbx)}
+  .dbx.on .box{background:var(--dbx);border-color:var(--dbx);color:#fff}
+  .dbx .cnt{font-size:10.5px;opacity:.85;font-weight:800}
+
+  /* 投稿チェック欄 */
+  .col4{display:flex;flex-direction:column;gap:6px}
+  .post{
+    display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;
+    font-size:12px;font-weight:700;padding:5px 7px;border-radius:7px;
+    border:1px solid var(--line);background:#1b232e;color:var(--txt);transition:.15s;
+  }
+  .post .box{
+    width:17px;height:17px;border-radius:4px;border:2px solid #8090a0;
+    flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:transparent;font-weight:900;
+  }
+  .post.x.on{background:#fff;border-color:#fff;color:#111}
+  .post.x.on .box{background:#111;border-color:#111;color:#fff}
+  .post.ig.on{background:linear-gradient(45deg,#e1306c,#fda437);border-color:#e1306c;color:#fff}
+  .post.ig.on .box{background:#fff;border-color:#fff;color:#e1306c}
+  /* 両方完了：薄くせず、緑のふち＋完了バッジでハッキリ示す */
+  .card.posted{border:2px solid #3ee88f !important;box-shadow:0 0 0 3px rgba(62,232,143,.3) !important}
+  .card.posted .body{background:linear-gradient(90deg,rgba(62,232,143,.16),transparent 70%) !important}
+  .donebadge{
+    display:none;align-items:center;justify-content:center;gap:5px;
+    font-size:12px;font-weight:900;color:#04220f;background:#3ee88f;
+    padding:5px 8px;border-radius:7px;letter-spacing:.5px;
+    box-shadow:0 1px 4px rgba(62,232,143,.5);
+  }
+  .card.posted .donebadge{display:flex}
+
+  @media(max-width:560px){
+    .card .body{grid-template-columns:1fr;gap:8px}
+    .col-h{display:none}
+    .col4{flex-direction:row}
+    .post{flex:1;justify-content:center}
+  }
+  .badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+  .badge{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:20px;border:1px solid}
+  .b-check{color:var(--check);border-color:var(--check);background:rgba(255,176,46,.14)}
+  .b-share{color:var(--share);border-color:var(--share);background:rgba(185,140,255,.14)}
+
+  .req{font-size:13.5px;color:#eef3f8}
+  .req .ng{color:#ff8585;font-weight:700}
+  .req .ck{color:var(--check);font-weight:700}
+  .none{color:#9fb0c0}
+
+  /* 写真チェック要のカードを強調 */
+  .card.check{border-color:var(--check);box-shadow:0 0 0 1px rgba(255,176,46,.4)}
+  .checkbox{
+    margin-top:6px;padding:8px 10px;border-radius:8px;
+    background:rgba(255,176,46,.13);border:1px solid rgba(255,176,46,.45);
+    font-size:12.5px;color:#ffd98a;font-weight:600;
+  }
+  .checkbox .lbl{color:var(--check);font-weight:800;margin-right:6px}
+  /* 速報あり（投稿対象）＝明るく光らせる */
+  .card.live{background:#374a52;border-color:#4d6b63}
+  .card.live .body{background:linear-gradient(90deg,rgba(62,232,143,.10),transparent 60%)}
+  /* 速報なしカードは沈める（投稿対象でないため） */
+  .card.norep{background:#222b35;opacity:.65}
+  .card.norep .name{color:#9aa6b2}
+
+  .card.now{border-color:var(--ok);box-shadow:0 0 0 2px rgba(62,207,142,.4)}
+  .card.now .body{background:linear-gradient(90deg,rgba(62,207,142,.16),transparent)}
+  /* 終了時刻を過ぎたカード：背景をはっきり変える（出演済みが一目で分かる） */
+  .card.done{border:2px solid #ff6b6b;background:#5a2a2a}
+  .card.done .body{background:repeating-linear-gradient(45deg,rgba(255,107,107,.22),rgba(255,107,107,.22) 14px,rgba(255,107,107,.10) 14px,rgba(255,107,107,.10) 28px)}
+  .card.done .name{color:#ffffff}
+  .card.done .big{color:#ffb3b3 !important}
+  .card.done .col-h{color:#e8b0b0}
+  /* 終了タグ：大きく・赤背景で目立たせる */
+  .donetag{
+    font-size:12px;font-weight:900;background:#ff4d4d;color:#fff;
+    padding:3px 10px;border-radius:6px;letter-spacing:.5px;
+    box-shadow:0 1px 4px rgba(255,77,77,.5);display:none;
+  }
+  .card.done .donetag{display:inline-block}
+  .nowtag{font-size:10px;font-weight:800;background:var(--ok);color:#06281c;padding:1px 7px;border-radius:4px}
+  .hidden{display:none!important}
+  footer{max-width:760px;margin:20px auto;padding:14px;color:var(--muted);font-size:11.5px;text-align:center;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header>
+  <div class="ttl">SENDAI MUSIC FUSE 2026 ／ ライブ速報ガイド</div>
+  <div class="sub">2026.05.30 SAT ・ Rensa / darwin / MACANA / ROCKATERIA / enn 2nd / enn 3rd</div>
+  <div class="clock">
+    <span class="now" id="clock">--:--</span>
+    <span class="now" id="status">読み込み中…</span>
+    <span class="now" id="progress">X 0 ／ IG 0</span>
+  </div>
+</header>
+
+<div class="filters" id="filters"></div>
+
+<div class="wrap">
+  <div class="legend">
+    <span><span class="dot" style="background:var(--ok)"></span>速報あり＝投稿対象</span>
+    <span><span class="dot" style="background:var(--dbx)"></span>DROPBOX格納（写真到着で自動✓）</span>
+    <span><span class="dot" style="background:var(--check)"></span>写真チェック要</span>
+    <span><span class="dot" style="background:var(--share)"></span>データ共有希望</span>
+    <span><span class="dot" style="background:var(--ng)"></span>撮影NG注意</span>
+  </div>
+  <div id="list"></div>
+</div>
+
+<footer>
+  ⏱ 速報の投稿目安は各アーティストの<strong>終了時刻</strong>です（カードの緑時刻）。<br>
+  ※出演順・出演時間は当日変更となる場合があります。<br>
+  速報なし＝アンサーシート未回答のため、対象か運営に要確認。物品販売（ROCKATERIA 14:00）は対象外。
+</footer>
+
+<script>
+const STAGE = {
+  Rensa:    {c:'var(--rensa)'},
+  darwin:   {c:'var(--darwin)'},
+  MACANA:   {c:'var(--macana)'},
+  ROCKATERIA:{c:'var(--rock)'},
+  'enn 2nd':{c:'var(--enn2)'},
+  'enn 3rd':{c:'var(--enn3)'},
+};
+
+// report: true=速報あり / null=未回答(要確認) / 'na'=対象外
+// dir = Dropbox内のアーティスト個別フォルダ（イベントルートからの相対パス）
+const DATA = [
+  {s:'11:30',e:'12:00',stage:'Rensa',name:'the paddles',report:true,tag:'O.A.',req:'特になし',dir:'RENSA/①Rensa_the paddles'},
+  {s:'11:45',e:'12:15',stage:'enn 2nd',name:'森大翔',report:true,req:'特になし',dir:'enn 2nd/①enn2nd_森 大翔'},
+  {s:'12:00',e:'12:30',stage:'MACANA',name:'My Dresscode',report:null,req:'アンサーシート未回答',dir:'MACANA/①MACANA_My Dresscode'},
+  {s:'12:15',e:'12:45',stage:'darwin',name:'#KTCHAN',report:null,req:'アンサーシート未回答',dir:'darwin/①darwin_KTCHAN'},
+  {s:'12:30',e:'13:00',stage:'ROCKATERIA',name:'前髪ぱっつん少年',report:null,req:'アンサーシート未回答',dir:'ROCKATERIA/①ROCKATERIA_前髪ぱっつん少年'},
+  {s:'12:45',e:'13:15',stage:'enn 3rd',name:'松室政哉',report:true,ng:'下からの煽りは避ける',dir:'enn 3rd/①enn3rd_松室政哉'},
+  {s:'13:00',e:'13:30',stage:'Rensa',name:'らそんぶる',report:true,req:'Vo.Dr.を上手側から、Gt.Ba.を下手側からメインで',dir:'RENSA/②Rensa_らそんぶる'},
+  {s:'13:15',e:'13:45',stage:'enn 2nd',name:'ORCALAND',report:true,req:'特になし',dir:'enn 2nd/②enn2nd_ORCALAND'},
+  {s:'13:30',e:'14:00',stage:'MACANA',name:'Laika Came Back',report:null,req:'アンサーシート未回答',dir:'MACANA/②MACANA_Laika Came Back'},
+  {s:'13:45',e:'14:15',stage:'darwin',name:'PURPLE BUBBLE',report:true,ng:'半目の写真は避ける',dir:'darwin/②darwin_PURPLE BUBBLE'},
+  {s:'14:00',e:'14:30',stage:'ROCKATERIA',name:'物品販売',report:'na',req:'物販ブース（速報対象外）',dir:'ROCKATERIA/②ROCKATERIA_物品販売'},
+  {s:'14:15',e:'14:45',stage:'enn 3rd',name:'野田愛実',report:true,req:'特になし',dir:'enn 3rd/②enn3rd_野田愛実'},
+  {s:'14:30',e:'15:00',stage:'Rensa',name:'クジラ夜の街',report:true,share:true,check:'可能ならその場で簡易チェック希望（難しければ無しでOK）',ng:'目をつぶっている写真はNG',dir:'RENSA/③Rensa_クジラ夜の街'},
+  {s:'14:45',e:'15:15',stage:'enn 2nd',name:'u named (radica)',report:true,req:'特になし',dir:'enn 2nd/③enn2nd_u named (radica)'},
+  {s:'15:00',e:'15:30',stage:'MACANA',name:'Offo tokyo',report:true,check:'出演終了後すぐ確認できるスタッフあり。可能なら確認したい',dir:'MACANA/③MACANA_Offo tokyo'},
+  {s:'15:15',e:'15:45',stage:'darwin',name:'三四少女',report:true,req:'特になし',dir:'darwin/③darwin_三四少女'},
+  {s:'15:30',e:'16:00',stage:'ROCKATERIA',name:'YUTORI-SEDAI',report:true,ng:'過度な顔アップ・下から煽りはNG',dir:'ROCKATERIA/③ROCKATERIA_YUTORI-SEDAI'},
+  {s:'15:45',e:'16:15',stage:'enn 3rd',name:'HONEBONE',report:true,req:'特になし',dir:'enn 3rd/③enn3rd_HONEBONE'},
+  {s:'16:00',e:'16:30',stage:'Rensa',name:'NEK!',report:true,check:'写真チェック必須',dir:'RENSA/④Rensa_NEK!'},
+  {s:'16:15',e:'16:45',stage:'enn 2nd',name:'メリクレット',report:true,req:'ドラムはサポートなのでソロ写真不要',dir:'enn 2nd/④enn2nd_メリクレット'},
+  {s:'16:30',e:'17:00',stage:'MACANA',name:'ペンギンラッシュ',report:true,req:'特になし',dir:'MACANA/④MACANA_ペンギンラッシュ'},
+  {s:'16:45',e:'17:15',stage:'darwin',name:'KOHAKU',report:true,req:'特になし',dir:'darwin/④darwin_KOHAKU'},
+  {s:'17:00',e:'17:30',stage:'ROCKATERIA',name:'西恵利香',report:true,check:'出演後すぐ確認可能。写真チェック希望（出演中でもOK）',dir:'ROCKATERIA/④ROCKATERIA_西恵利香'},
+  {s:'17:15',e:'17:45',stage:'enn 3rd',name:'MioN(ANEMONÉ)',report:true,ng:'顔やパーツのアップはNG／できれば正面からの写真は避ける',dir:'enn 3rd/④enn3rd_MioN (ANEMONÉ)'},
+  {s:'17:30',e:'18:00',stage:'Rensa',name:'ちゃくら',report:true,ng:'全員 白目・半目は確実にNG／ヨリはウエストアップまで／極度に煽らない',dir:'RENSA/⑤Rensa_ちゃくら'},
+  {s:'18:00',e:'18:30',stage:'MACANA',name:'カラコルムの山々',report:true,req:'特になし',dir:'MACANA/⑤MACANA_カラコルムの山々'},
+  {s:'18:15',e:'18:45',stage:'darwin',name:'Яu-α',report:true,req:'特になし',dir:'darwin/⑤darwin_Яu-а'},
+  {s:'18:30',e:'19:00',stage:'ROCKATERIA',name:'AFRO PARKER',report:true,check:'出演後すぐ確認可能。写真チェック希望（出演中でもOK）',dir:'ROCKATERIA/⑤ROCKATERIA_AFRO PARKER'},
+  {s:'19:15',e:'19:45',stage:'Rensa',name:'クレイジーウォウウォ!!',report:true,ng:'目をつぶっていなければOK',dir:'RENSA/⑥Rensa_クレイジーウォウウォ！！'},
+];
+
+const EVENT_DATE = '2026-05-30';
+const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
+
+function card(d){
+  const st = STAGE[d.stage]||{c:'#888'};
+  const id = `${d.s}_${d.name}`;
+
+  // 速報ステータス pill
+  let rep = (d.report===true)
+    ? '<span class="rep rep-yes">速報 ○ あり</span>'
+    : '<span class="rep rep-no">速報 × なし</span>';
+
+  // 補助バッジ
+  let badges = '';
+  if(d.tag)   badges += `<span class="badge b-share" style="color:#9fb4c6;border-color:#9fb4c6;background:rgba(159,180,198,.1)">${d.tag}</span>`;
+  if(d.check) badges += '<span class="badge b-check">📸 写真チェック要</span>';
+  if(d.share) badges += '<span class="badge b-share">💾 データ共有希望</span>';
+
+  // リクエスト本文
+  let req = '';
+  if(d.ng) req += `<span class="ng">⚠ ${d.ng}</span><br>`;
+  if(d.req){
+    const cls = (d.req==='特になし'||d.req.includes('未回答')||d.req.includes('対象外'))?'none':'';
+    req += `<span class="${cls}">${d.req}</span>`;
+  }
+
+  // 写真チェック専用の強調ボックス（詳細を明記）
+  let checkBox = '';
+  if(d.check){
+    checkBox = `<div class="checkbox"><span class="lbl">📸 要確認</span>${d.check}</div>`;
+  }
+
+  const cls = ['card'];
+  if(d.report===true) cls.push('live');
+  if(d.check) cls.push('check');
+  if(d.report===null || d.report==='na') cls.push('norep');
+
+  const col3 = (badges||req||checkBox)
+    ? `${badges?`<div class="badges">${badges}</div>`:''}${req?`<div class="req">${req}</div>`:''}${checkBox}`
+    : '<span class="none" style="font-size:12px">—</span>';
+
+  return `<div class="${cls.join(' ')}" data-id="${id}" data-start="${toMin(d.s)}" data-end="${toMin(d.e)}" data-report="${d.report}">
+    <div class="bar" style="background:${st.c}"></div>
+    <div class="body">
+      <div class="col col1">
+        <div class="col-h">終了時刻 / ステージ</div>
+        <div class="endtime">
+          <span class="start">${d.s}〜</span>
+          <span class="elabel">終了</span>
+          <span class="big">${d.e}</span>
+        </div>
+        <span class="stage" style="background:${st.c}">${d.stage}</span>
+        <span class="nowtag" style="display:none">▶ 出演中</span>
+        <span class="donetag">🏁 出演終了</span>
+      </div>
+      <div class="col col2">
+        <div class="col-h">アーティスト</div>
+        <div class="name">${d.name}</div>
+        ${rep}
+        ${d.report==='na' ? '' : `<div class="dbx" data-dir="${(d.dir||'').replace(/"/g,'&quot;')}"><span class="box">✓</span><span class="dbxlabel">DROPBOX自動巡回</span><span class="cnt"></span></div>`}
+      </div>
+      <div class="col col3">
+        <div class="col-h">撮影リクエスト / 注意</div>
+        ${col3}
+      </div>
+      <div class="col col4">
+        <div class="col-h">投稿チェック</div>
+        <div class="donebadge">✅ 投稿完了</div>
+        <div class="post x"  data-id="${id}" data-sns="x"><span class="box">✓</span>X投稿</div>
+        <div class="post ig" data-id="${id}" data-sns="ig"><span class="box">✓</span>INSTA</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+let curStage='all';
+
+function buildFilters(){
+  const f=document.getElementById('filters');
+  const btns=[['all','全ステージ','#444b57']]
+    .concat(Object.keys(STAGE).map(s=>[s,s,STAGE[s].c]));
+  f.innerHTML=btns.map(([key,label,col])=>
+    `<div class="fbtn${key===curStage?' active':''}" data-stage="${key}" style="background:${col}">${label}</div>`
+  ).join('');
+  f.querySelectorAll('.fbtn').forEach(b=>b.onclick=()=>{
+    curStage=b.dataset.stage;
+    buildFilters();
+    render();
+  });
+}
+
+function render(){
+  const list=document.getElementById('list');
+  let rows=DATA.slice().sort((a,b)=>toMin(a.e)-toMin(b.e));
+  if(curStage!=='all') rows=rows.filter(d=>d.stage===curStage);
+  // 写真チェック要サマリー（表示中のステージに連動）
+  const ck=rows.filter(d=>d.check);
+  const sum= ck.length ? `<div class="checkbox" style="margin:0 0 12px">
+    <span class="lbl">📸 写真チェック要 ${ck.length}組</span>
+    ${ck.map(d=>`${d.s}–${d.e} <b>${d.name}</b>(${d.stage})`).join(' ／ ')}
+  </div>` : '';
+  const head = curStage==='all' ? '終了時刻順（＝速報投稿の目安）' : `${curStage} ／ 終了時刻順`;
+  list.innerHTML=`<div class="group-h">${head}</div>`+sum+rows.map(card).join('');
+  applyPosts();
+  applyDropbox();
+  tick();
+}
+
+/* DROPBOX格納ステータス（status.json を定期取得して自動チェック） */
+let DBX_STATUS = {};
+function applyDropbox(){
+  document.querySelectorAll('.dbx').forEach(el=>{
+    const dir = (el.dataset.dir||'').normalize('NFC');
+    const n = (dir && DBX_STATUS[dir]) || 0;
+    el.classList.toggle('on', n>0);
+    const lbl = el.querySelector('.dbxlabel');
+    const cnt = el.querySelector('.cnt');
+    if(n>0){ lbl.textContent='DROPBOX格納済'; cnt.textContent=`${n}枚`; }
+    else   { lbl.textContent='DROPBOX自動巡回'; cnt.textContent=''; }
+  });
+}
+async function fetchDropbox(){
+  try{
+    const r = await fetch('status.json?_='+new Date().getTime());
+    if(!r.ok) return;
+    const raw = await r.json();
+    DBX_STATUS = {};
+    for(const k in raw){ DBX_STATUS[k.normalize('NFC')] = raw[k]; } // NFC統一で照合
+    applyDropbox();
+  }catch(e){ /* file://直開きやサーバー無しでは取得不可（その場合は未格納表示のまま） */ }
+}
+
+/* 投稿チェックの状態管理（localStorageに保存） */
+const PKEY='smf2026_posts';
+function loadPosts(){ try{return JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){return {}} }
+function savePosts(p){ localStorage.setItem(PKEY,JSON.stringify(p)); }
+
+function applyPosts(){
+  const p=loadPosts();
+  document.querySelectorAll('.post').forEach(el=>{
+    const on = p[el.dataset.id] && p[el.dataset.id][el.dataset.sns];
+    el.classList.toggle('on',!!on);
+  });
+  refreshPostedCards();
+}
+function refreshPostedCards(){
+  const p=loadPosts();
+  let nx=0,ng=0;
+  const total=DATA.filter(d=>d.report===true).length;
+  document.querySelectorAll('.card').forEach(c=>{
+    const posts=c.querySelectorAll('.post');
+    if(!posts.length) return;
+    const id=posts[0].dataset.id;
+    const rec=p[id]||{};
+    if(rec.x) nx++;
+    if(rec.ig) ng++;
+    c.classList.toggle('posted', !!(rec.x && rec.ig));
+  });
+  const pg=document.getElementById('progress');
+  if(pg) pg.textContent=`X ${nx}／${total}　IG ${ng}／${total}`;
+}
+document.getElementById('list').addEventListener('click',e=>{
+  const el=e.target.closest('.post');
+  if(!el) return;
+  const p=loadPosts();
+  const id=el.dataset.id, sns=el.dataset.sns;
+  p[id]=p[id]||{};
+  p[id][sns]=!p[id][sns];
+  savePosts(p);
+  el.classList.toggle('on',p[id][sns]);
+  refreshPostedCards();
+});
+
+/* ▼テスト用：ここに入れたカードは日付に関係なく「終了済み」背景になります。
+   本番前に空配列 [] にしてください。 例) const TEST_DONE = []; */
+const TEST_DONE = [];
+
+function tick(){
+  const now=new Date();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('clock').textContent=`${hh}:${mm}`;
+
+  const isEvent = (now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'))===EVENT_DATE;
+  const cur = now.getHours()*60+now.getMinutes();
+  const stat=document.getElementById('status');
+
+  if(!isEvent){ stat.textContent='当日(5/30)に現在地ハイライトが有効になります'; }
+
+  let nowName='', nextName='', nextMin=Infinity;
+  document.querySelectorAll('.card').forEach(c=>{
+    const s=+c.dataset.start, e=+c.dataset.end;
+    c.classList.remove('now','done');
+    c.querySelector('.nowtag').style.display='none';
+    // テスト用：強制的に終了済みにする
+    if(TEST_DONE.includes(c.dataset.id)){ c.classList.add('done'); return; }
+    if(!isEvent) return;
+    if(cur>=s && cur<e){ c.classList.add('now'); c.querySelector('.nowtag').style.display='inline'; if(c.dataset.report==='true') nowName=c.querySelector('.name').textContent; }
+    else if(cur>=e){ c.classList.add('done'); }
+    else if(s>cur && s<nextMin && c.dataset.report==='true'){ nextMin=s; nextName=c.querySelector('.name').textContent; }
+  });
+  if(isEvent){
+    let msg=[];
+    if(nowName) msg.push(`▶出演中: ${nowName}`);
+    if(nextName) msg.push(`次: ${nextName}(${String(Math.floor(nextMin/60)).padStart(2,'0')}:${String(nextMin%60).padStart(2,'0')})`);
+    stat.textContent = msg.join(' ／ ') || '本日の出演は終了';
+  }
+}
+
+buildFilters();
+render();
+setInterval(tick,30000);
+fetchDropbox();
+setInterval(fetchDropbox,15000); // 15秒ごとにDropbox格納状況を再取得
+</script>
+</body>
+</html>
