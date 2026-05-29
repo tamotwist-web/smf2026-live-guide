@@ -116,8 +116,8 @@
   .card.posted .donebadge{display:flex}
   /* テキスト生成ボタン */
   .genbtn{
-    display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;user-select:none;
-    font-size:12px;font-weight:800;padding:6px 7px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;
+    font-size:11.5px;font-weight:800;padding:6px 4px;border-radius:7px;white-space:nowrap;
     color:#fff;background:#5b3fb0;border:1px solid #7c5fe0;transition:.15s;
   }
   .genbtn:hover{background:#6c4dca}
@@ -411,7 +411,7 @@ function card(d){
         <div class="donebadge">✅ 投稿完了</div>
         <div class="post x"  data-id="${id}" data-sns="x"><span class="box">✓</span>X投稿</div>
         <div class="post ig" data-id="${id}" data-sns="ig"><span class="box">✓</span>INSTA</div>
-        <div class="genbtn" data-name="${(d.name||'').replace(/"/g,'&quot;')}" data-stage="${d.stage}">📝 テキスト生成</div>
+        <div class="genbtn" data-name="${(d.name||'').replace(/"/g,'&quot;')}" data-stage="${d.stage}">テキスト生成</div>
       </div>
     </div>
   </div>`;
