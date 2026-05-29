@@ -114,6 +114,39 @@
     padding:5px 8px;border-radius:7px;letter-spacing:.5px;
   }
   .card.posted .donebadge{display:flex}
+  /* テキスト生成ボタン */
+  .genbtn{
+    display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;user-select:none;
+    font-size:12px;font-weight:800;padding:6px 7px;border-radius:7px;
+    color:#fff;background:#5b3fb0;border:1px solid #7c5fe0;transition:.15s;
+  }
+  .genbtn:hover{background:#6c4dca}
+  /* モーダル */
+  .modal{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:18px;
+  }
+  .modal.open{display:flex}
+  .modal-box{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    width:100%;max-width:440px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.6);
+  }
+  .modal-box h3{font-size:15px;margin-bottom:4px}
+  .modal-box .msub{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+  .modal-box textarea{
+    width:100%;height:190px;resize:vertical;border-radius:9px;padding:11px;
+    background:#161d26;color:#fff;border:1px solid var(--line);
+    font-family:ui-monospace,Menlo,monospace;font-size:13.5px;line-height:1.7;
+  }
+  .modal-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+  .modal-note b{color:#bcd6ff}
+  .modal-actions{display:flex;gap:8px;margin-top:12px}
+  .mbtn{
+    flex:1;text-align:center;font-size:13px;font-weight:800;padding:10px;border-radius:9px;cursor:pointer;border:1px solid var(--line);
+  }
+  .mbtn.copy{background:var(--ok);color:#04220f;border-color:var(--ok)}
+  .mbtn.copy.done{background:#2f7fff;color:#fff;border-color:#2f7fff}
+  .mbtn.close{background:var(--card2);color:#fff}
 
   @media(max-width:560px){
     /* スマホ：左=終了時刻/ステージ、右=詳細 の2カラム構造を維持 */
@@ -198,6 +231,19 @@
   <div id="list"></div>
 </div>
 
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <h3 id="modalTitle">投稿テキスト</h3>
+    <div class="msub">そのままコピーしてX / Instagramに貼り付け（編集も可）</div>
+    <textarea id="modalText"></textarea>
+    <div class="modal-note" id="modalNote"></div>
+    <div class="modal-actions">
+      <div class="mbtn copy" id="modalCopy">コピー</div>
+      <div class="mbtn close" id="modalClose">閉じる</div>
+    </div>
+  </div>
+</div>
+
 <footer>
   ⏱ 速報の投稿目安は各アーティストの<strong>終了時刻</strong>です（カードの緑時刻）。<br>
   ※出演順・出演時間は当日変更となる場合があります。<br>
@@ -250,6 +296,53 @@ const DATA = [
 
 const EVENT_DATE = '2026-05-30';
 const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
+
+/* ===== 投稿テキスト生成 ===== */
+// 会場ハッシュタグ
+const STAGE_TAG = {Rensa:'Rensa', darwin:'darwin', MACANA:'MACANA', ROCKATERIA:'ROCKATERIA', 'enn 2nd':'enn2nd', 'enn 3rd':'enn3rd'};
+// 会場ごとの担当カメラマン（IG=Instagram用、X=X用ハンドル）
+const PHOTOG = {
+  Rensa:       {name:'村長（高橋卓也）', ig:'@son_tkhs', x:'@son_tkhs'},
+  darwin:      {name:'村長（高橋卓也）', ig:'@son_tkhs', x:'@son_tkhs'},
+  MACANA:      {name:'髙野立伎',         ig:'@R.1verse', x:'@R_1verse'},
+  ROCKATERIA:  {name:'髙野立伎',         ig:'@R.1verse', x:'@R_1verse'},
+  'enn 2nd':   {name:'あかさかなつき',   ig:'@aka3ka', x:'@aka3ka'},
+  'enn 3rd':   {name:'あかさかなつき',   ig:'@aka3ka', x:'@aka3ka'},
+};
+// アーティスト別ハッシュタグ（公式アカウント確認済み・2026/5時点）
+const ARTIST_TAGS = {
+  'the paddles':['#thepaddles'],
+  '森大翔':['#森大翔'],
+  '松室政哉':['#松室政哉'],
+  'らそんぶる':['#らそんぶる'],
+  'ORCALAND':['#ORCALAND'],
+  'PURPLE BUBBLE':['#PURPLEBUBBLE'],
+  '野田愛実':['#野田愛実'],
+  'クジラ夜の街':['#クジラ夜の街'],
+  'u named (radica)':['#unamedradica'],
+  'Offo tokyo':['#Offotokyo'],
+  '三四少女':['#三四少女'],
+  'YUTORI-SEDAI':['#YUTORISEDAI'],
+  'HONEBONE':['#HONEBONE'],
+  'NEK!':['#NEK'],
+  'メリクレット':['#メリクレット'],
+  'ペンギンラッシュ':['#ペンギンラッシュ'],
+  'KOHAKU':['#KOHAKU'],
+  '西恵利香':['#西恵利香'],
+  'MioN(ANEMONÉ)':['#ANEMONÉ','#アネモネ'],
+  'ちゃくら':['#ちゃくら'],
+  'カラコルムの山々':['#カラコルムの山々'],
+  'Яu-α':['#Яu_a','#るうあ'],
+  'AFRO PARKER':['#AFROPARKER'],
+  'クレイジーウォウウォ!!':['#クレイジーウォウウォ'],
+};
+function genCaption(name, stage, sns){
+  const stageTag = STAGE_TAG[stage] || stage.replace(/\s/g,'');
+  const atags = ARTIST_TAGS[name] || ['#'+name.replace(/[ !?！？()（）]/g,'')];
+  const ph = PHOTOG[stage] || {name:'', ig:'', x:''};
+  const handle = (sns==='x') ? ph.x : ph.ig;
+  return ['#'+stageTag, ...atags, '#SMF', '#SMF2026', '#FUSE', '', 'Photo:'+ph.name, handle].join('\n');
+}
 
 function card(d){
   const st = STAGE[d.stage]||{c:'#888'};
@@ -318,6 +411,7 @@ function card(d){
         <div class="donebadge">✅ 投稿完了</div>
         <div class="post x"  data-id="${id}" data-sns="x"><span class="box">✓</span>X投稿</div>
         <div class="post ig" data-id="${id}" data-sns="ig"><span class="box">✓</span>INSTA</div>
+        <div class="genbtn" data-name="${(d.name||'').replace(/"/g,'&quot;')}" data-stage="${d.stage}">📝 テキスト生成</div>
       </div>
     </div>
   </div>`;
@@ -410,6 +504,10 @@ function refreshPostedCards(){
   if(pg) pg.textContent=`X ${nx}／${total}　IG ${ng}／${total}`;
 }
 document.getElementById('list').addEventListener('click',e=>{
+  // テキスト生成ボタン
+  const gb=e.target.closest('.genbtn');
+  if(gb){ openGen(gb.dataset.name, gb.dataset.stage); return; }
+  // 投稿チェック
   const el=e.target.closest('.post');
   if(!el) return;
   const p=loadPosts();
@@ -420,6 +518,30 @@ document.getElementById('list').addEventListener('click',e=>{
   el.classList.toggle('on',p[id][sns]);
   refreshPostedCards();
 });
+
+/* テキスト生成モーダル */
+const modal=document.getElementById('modal');
+function openGen(name, stage){
+  document.getElementById('modalTitle').textContent='投稿テキスト：'+name;
+  // 初期はInstagram用テキスト
+  document.getElementById('modalText').value = genCaption(name, stage, 'ig');
+  const ph = PHOTOG[stage] || {};
+  let note = 'カメラマン：'+(ph.name||'')+'（'+stage+' 担当）';
+  if(ph.x && ph.x!==ph.ig){
+    note += `<br>※上はInstagram用（${ph.ig}）。<b>X(Twitter)に投稿する場合は</b>最終行を <b>${ph.x}</b> に変えてください。`;
+  }
+  document.getElementById('modalNote').innerHTML = note;
+  const cp=document.getElementById('modalCopy'); cp.textContent='コピー'; cp.classList.remove('done');
+  modal.classList.add('open');
+}
+document.getElementById('modalCopy').onclick=async()=>{
+  const ta=document.getElementById('modalText');
+  try{ await navigator.clipboard.writeText(ta.value); }
+  catch(e){ ta.select(); document.execCommand('copy'); }
+  const cp=document.getElementById('modalCopy'); cp.textContent='✅ コピーしました'; cp.classList.add('done');
+};
+document.getElementById('modalClose').onclick=()=>modal.classList.remove('open');
+modal.addEventListener('click',e=>{ if(e.target===modal) modal.classList.remove('open'); });
 
 /* ▼テスト用：ここに入れたカードは日付に関係なく「終了済み」背景になります。
    本番前に空配列 [] にしてください。 例) const TEST_DONE = []; */
