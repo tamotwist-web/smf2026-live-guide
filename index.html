@@ -366,7 +366,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530003052';
+const BUILD = '20260530013459';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -381,8 +381,8 @@ async function checkUpdate(){
 setInterval(checkUpdate, 60000); // 60秒ごとに更新チェック
 
 /* ===== 投稿テキスト生成 ===== */
-// 会場ハッシュタグ
-const STAGE_TAG = {Rensa:'Rensa', darwin:'darwin', MACANA:'MACANA', ROCKATERIA:'ROCKATERIA', 'enn 2nd':'enn2nd', 'enn 3rd':'enn3rd'};
+// 会場ハッシュタグ（#sendai_◯◯ 形式。MACANAのみ確定、他は推測：要確認）
+const STAGE_TAG = {Rensa:'sendai_rensa', darwin:'sendai_darwin', MACANA:'sendai_macana', ROCKATERIA:'sendai_rockateria', 'enn 2nd':'sendai_enn', 'enn 3rd':'sendai_enn'};
 // 会場ごとの担当カメラマン（IG=Instagram用、X=X用ハンドル）
 const PHOTOG = {
   Rensa:       {name:'村長（高橋卓也）', ig:'@son_tkhs', x:'@son_tkhs'},
@@ -424,7 +424,7 @@ function genCaption(name, stage, sns){
   const atags = ARTIST_TAGS[name] || ['#'+name.replace(/[ !?！？()（）]/g,'')];
   const ph = PHOTOG[stage] || {name:'', ig:'', x:''};
   const handle = (sns==='x') ? ph.x : ph.ig;
-  return ['Sendaimusicfuse2026 Photo Report！！！', '', '#'+stageTag, ...atags, '#SMF', '#SMF2026', '#FUSE', '', 'Photo:'+ph.name, handle].join('\n');
+  return ['SMF2026 Photo Report！！！', '', '-'+stage+'-', name, '', '#'+stageTag, ...atags, '#SMF', '#SMF2026', '#FUSE', '', 'Photo:'+ph.name, handle].join('\n');
 }
 
 function card(d){
