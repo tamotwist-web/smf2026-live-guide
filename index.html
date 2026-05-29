@@ -147,6 +147,24 @@
   .mbtn.copy{background:var(--ok);color:#04220f;border-color:var(--ok)}
   .mbtn.copy.done{background:#2f7fff;color:#fff;border-color:#2f7fff}
   .mbtn.close{background:var(--card2);color:#fff}
+  /* 合言葉ゲート（初回のみ・端末に記憶） */
+  #gate{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(150deg,#0c1116,#0c5f55);padding:22px;
+  }
+  .gate-box{width:100%;max-width:340px;text-align:center}
+  .gate-ttl{font-size:18px;font-weight:900;line-height:1.4;margin-bottom:6px}
+  .gate-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+  #gatePw{
+    width:100%;text-align:center;font-size:22px;letter-spacing:6px;font-weight:800;
+    padding:13px;border-radius:11px;border:2px solid var(--line);background:#161d26;color:#fff;
+  }
+  #gatePw:focus{outline:none;border-color:var(--ok)}
+  .gate-btn{
+    margin-top:12px;font-size:15px;font-weight:800;padding:13px;border-radius:11px;cursor:pointer;
+    background:var(--ok);color:#04220f;
+  }
+  .gate-err{margin-top:10px;font-size:12.5px;color:var(--ng);font-weight:700;min-height:16px}
 
   @media(max-width:560px){
     /* スマホ：左=終了時刻/ステージ、右=詳細 の2カラム構造を維持 */
@@ -208,6 +226,30 @@
 </style>
 </head>
 <body>
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-ttl">SENDAI MUSIC FUSE 2026<br>ライブ速報ガイド</div>
+    <div class="gate-sub">合言葉を入力してください</div>
+    <input id="gatePw" type="password" inputmode="numeric" autocomplete="off" placeholder="••••">
+    <div class="gate-btn" id="gateBtn">入る</div>
+    <div class="gate-err" id="gateErr"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='smf2026_gate', PW='0530';
+  var gate=document.getElementById('gate');
+  if(localStorage.getItem(KEY)==='ok'){ gate.style.display='none'; return; } // 記憶済みは素通り
+  function enter(){
+    var v=(document.getElementById('gatePw').value||'').trim();
+    if(v===PW){ localStorage.setItem(KEY,'ok'); gate.style.display='none'; }
+    else { document.getElementById('gateErr').textContent='合言葉が違います'; }
+  }
+  document.getElementById('gateBtn').onclick=enter;
+  document.getElementById('gatePw').addEventListener('keydown',function(e){ if(e.key==='Enter') enter(); });
+  setTimeout(function(){ try{ document.getElementById('gatePw').focus(); }catch(e){} }, 100);
+})();
+</script>
 <header>
   <div class="ttl">SENDAI MUSIC FUSE 2026 ／ ライブ速報ガイド</div>
   <div class="sub">2026.05.30 SAT ・ Rensa / darwin / MACANA / ROCKATERIA / enn 2nd / enn 3rd</div>
