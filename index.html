@@ -162,6 +162,8 @@
   }
   .modal-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.6}
   .modal-note b{color:#bcd6ff}
+  .modal-warn{color:#ff5a5a;font-weight:900}
+  .modal-warn b{color:#ff5a5a}
   .modal-actions{display:flex;gap:8px;margin-top:12px}
   .mbtn{
     flex:1;text-align:center;font-size:13px;font-weight:800;padding:10px;border-radius:9px;cursor:pointer;border:1px solid var(--line);
@@ -366,7 +368,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530014752';
+const BUILD = '20260530015433';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -648,7 +650,7 @@ function openGen(name, stage){
   const ph = PHOTOG[stage] || {};
   let note = 'カメラマン：'+(ph.name||'')+'（'+stage+' 担当）';
   if(ph.x && ph.x!==ph.ig){
-    note += `<br>※上はInstagram用（${ph.ig}）。<b>X(Twitter)に投稿する場合は</b>最終行を <b>${ph.x}</b> に変えてください。`;
+    note += `<br><span class="modal-warn">※上はInstagram用（${ph.ig}）。X(Twitter)に投稿する場合は最終行を ${ph.x} に変えてください。</span>`;
   }
   document.getElementById('modalNote').innerHTML = note;
   const cp=document.getElementById('modalCopy'); cp.textContent='コピー'; cp.classList.remove('done');
