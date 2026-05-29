@@ -155,6 +155,10 @@
   }
   .modal-box h3{font-size:15px;margin-bottom:4px}
   .modal-box .msub{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+  .snsToggle{display:flex;gap:8px;margin-bottom:10px}
+  .snsbtn{flex:1;text-align:center;font-size:12.5px;font-weight:800;padding:8px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:#1b232e;color:var(--muted)}
+  .snsbtn.active[data-sns="ig"]{background:linear-gradient(45deg,#e1306c,#fda437);color:#fff;border-color:#e1306c}
+  .snsbtn.active[data-sns="x"]{background:#fff;color:#111;border-color:#fff}
   .modal-box textarea{
     width:100%;height:190px;resize:vertical;border-radius:9px;padding:11px;
     background:#161d26;color:#fff;border:1px solid var(--line);
@@ -303,6 +307,10 @@
   <div class="modal-box">
     <h3 id="modalTitle">投稿テキスト</h3>
     <div class="msub">そのままコピーしてX / Instagramに貼り付け（編集も可）</div>
+    <div class="snsToggle" id="snsToggle" style="display:none">
+      <div class="snsbtn active" data-sns="ig">📷 Instagram用</div>
+      <div class="snsbtn" data-sns="x">𝕏 X(Twitter)用</div>
+    </div>
     <textarea id="modalText"></textarea>
     <div class="modal-note" id="modalNote"></div>
     <div class="modal-actions">
@@ -368,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530015433';
+const BUILD = '20260530015720';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -643,19 +651,29 @@ document.getElementById('list').addEventListener('click',e=>{
 
 /* テキスト生成モーダル */
 const modal=document.getElementById('modal');
+let curGen={name:'', stage:''};
+function renderGen(sns){
+  document.getElementById('modalText').value = genCaption(curGen.name, curGen.stage, sns);
+  document.querySelectorAll('#snsToggle .snsbtn').forEach(b=>b.classList.toggle('active', b.dataset.sns===sns));
+  const cp=document.getElementById('modalCopy'); cp.textContent='コピー'; cp.classList.remove('done');
+}
 function openGen(name, stage){
+  curGen={name, stage};
   document.getElementById('modalTitle').textContent='投稿テキスト：'+name;
-  // 初期はInstagram用テキスト
-  document.getElementById('modalText').value = genCaption(name, stage, 'ig');
   const ph = PHOTOG[stage] || {};
+  const diff = !!(ph.x && ph.ig && ph.x!==ph.ig); // X/IGでハンドルが違う＝切替表示
+  document.getElementById('snsToggle').style.display = diff ? 'flex' : 'none';
+  renderGen('ig'); // 初期はInstagram用
   let note = 'カメラマン：'+(ph.name||'')+'（'+stage+' 担当）';
-  if(ph.x && ph.x!==ph.ig){
-    note += `<br><span class="modal-warn">※上はInstagram用（${ph.ig}）。X(Twitter)に投稿する場合は最終行を ${ph.x} に変えてください。</span>`;
+  if(diff){
+    note += `<br><span class="modal-warn">※上のボタンで Instagram用 / X用 を切り替えできます（カメラマンのハンドルが変わります）。</span>`;
   }
   document.getElementById('modalNote').innerHTML = note;
-  const cp=document.getElementById('modalCopy'); cp.textContent='コピー'; cp.classList.remove('done');
   modal.classList.add('open');
 }
+document.getElementById('snsToggle').addEventListener('click',e=>{
+  const b=e.target.closest('.snsbtn'); if(b) renderGen(b.dataset.sns);
+});
 document.getElementById('modalCopy').onclick=async()=>{
   const ta=document.getElementById('modalText');
   try{ await navigator.clipboard.writeText(ta.value); }
