@@ -366,7 +366,7 @@ const DATA = [
   {s:'17:30',e:'18:00',stage:'Rensa',name:'ちゃくら',report:true,ng:'全員 白目・半目は確実にNG／ヨリはウエストアップまで／極度に煽らない',dir:'RENSA/⑤Rensa_ちゃくら'},
   {s:'18:00',e:'18:30',stage:'MACANA',name:'カラコルムの山々',report:true,req:'特になし',dir:'MACANA/⑤MACANA_カラコルムの山々'},
   {s:'18:15',e:'18:45',stage:'darwin',name:'Яu-α',report:true,req:'特になし',dir:'darwin/⑤darwin_Яu-а'},
-  {s:'18:30',e:'19:00',stage:'ROCKATERIA',name:'AFRO PARKER',report:true,check:'出演後すぐ確認可能。写真チェック希望（出演中でもOK）',dir:'ROCKATERIA/⑤ROCKATERIA_AFRO PARKER'},
+  {s:'18:30',e:'19:00',stage:'ROCKATERIA',name:'AFRO PARKER',report:true,dir:'ROCKATERIA/⑤ROCKATERIA_AFRO PARKER'},
   {s:'19:15',e:'19:45',stage:'Rensa',name:'クレイジーウォウウォ!!',report:true,ng:'目をつぶっていなければOK',dir:'RENSA/⑥Rensa_クレイジーウォウウォ！！'},
 ];
 
@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530193018';
+const BUILD = '20260530194621';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
