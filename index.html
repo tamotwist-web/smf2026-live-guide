@@ -349,7 +349,7 @@ const DATA = [
   {s:'13:15',e:'13:45',stage:'enn 2nd',name:'ORCALAND',report:true,req:'特になし',dir:'enn 2nd/②enn2nd_ORCALAND'},
   {s:'13:30',e:'14:00',stage:'MACANA',name:'Laika Came Back',report:null,req:'アンサーシート未回答',dir:'MACANA/②MACANA_Laika Came Back'},
   {s:'13:45',e:'14:15',stage:'darwin',name:'PURPLE BUBBLE',report:true,ng:'半目の写真は避ける',dir:'darwin/②darwin_PURPLE BUBBLE'},
-  {s:'14:00',e:'14:30',stage:'ROCKATERIA',name:'物品販売',report:'na',req:'物販ブース（速報対象外）',dir:'ROCKATERIA/②ROCKATERIA_物品販売'},
+  {s:'14:00',e:'14:30',stage:'ROCKATERIA',name:'物品販売',report:true,req:'物販ブース',dir:'ROCKATERIA/②ROCKATERIA_物品販売'},
   {s:'14:15',e:'14:45',stage:'enn 3rd',name:'野田愛実',report:true,req:'特になし',dir:'enn 3rd/②enn3rd_野田愛実'},
   {s:'14:30',e:'15:00',stage:'Rensa',name:'クジラ夜の街',report:true,share:true,check:'可能ならその場で簡易チェック希望（難しければ無しでOK）',ng:'目をつぶっている写真はNG',dir:'RENSA/③Rensa_クジラ夜の街'},
   {s:'14:45',e:'15:15',stage:'enn 2nd',name:'u named (radica)',report:true,req:'特になし',dir:'enn 2nd/③enn2nd_u named (radica)'},
@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530153157';
+const BUILD = '20260530153505';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
