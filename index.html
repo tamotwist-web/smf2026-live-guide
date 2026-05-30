@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530173111';
+const BUILD = '20260530174558';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
