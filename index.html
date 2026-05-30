@@ -355,7 +355,7 @@ const DATA = [
   {s:'14:45',e:'15:15',stage:'enn 2nd',name:'u named (radica)',report:true,req:'特になし',dir:'enn 2nd/③enn2nd_u named (radica)'},
   {s:'15:00',e:'15:30',stage:'MACANA',name:'Offo tokyo',report:true,check:'出演終了後すぐ確認できるスタッフあり。可能なら確認したい',dir:'MACANA/③MACANA_Offo tokyo'},
   {s:'15:15',e:'15:45',stage:'darwin',name:'三四少女',report:true,req:'特になし',dir:'darwin/③darwin_三四少女'},
-  {s:'15:30',e:'16:00',stage:'ROCKATERIA',name:'YUTORI-SEDAI',report:true,ng:'過度な顔アップ・下から煽りはNG',dir:'ROCKATERIA/③ROCKATERIA_YUTORI-SEDAI'},
+  {s:'15:30',e:'16:00',stage:'ROCKATERIA',name:'YUTORI-SEDAI',report:true,check:'写真チェック必須',ng:'過度な顔アップ・下から煽りはNG',dir:'ROCKATERIA/③ROCKATERIA_YUTORI-SEDAI'},
   {s:'15:45',e:'16:15',stage:'enn 3rd',name:'HONEBONE',report:true,req:'特になし',dir:'enn 3rd/③enn3rd_HONEBONE'},
   {s:'16:00',e:'16:30',stage:'Rensa',name:'NEK!',report:true,check:'写真チェック必須',dir:'RENSA/④Rensa_NEK!'},
   {s:'16:15',e:'16:45',stage:'enn 2nd',name:'メリクレット',report:true,req:'ドラムはサポートなのでソロ写真不要',dir:'enn 2nd/④enn2nd_メリクレット'},
@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530183123';
+const BUILD = '20260530183402';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
