@@ -342,8 +342,8 @@ const DATA = [
   {s:'11:30',e:'12:00',stage:'Rensa',name:'the paddles',report:true,tag:'O.A.',req:'特になし',dir:'RENSA/①Rensa_the paddles'},
   {s:'11:45',e:'12:15',stage:'enn 2nd',name:'森大翔',report:true,req:'特になし',dir:'enn 2nd/①enn2nd_森 大翔'},
   {s:'12:00',e:'12:30',stage:'MACANA',name:'My Dresscode',report:null,req:'アンサーシート未回答',dir:'MACANA/①MACANA_My Dresscode'},
-  {s:'12:15',e:'12:45',stage:'darwin',name:'#KTCHAN',report:null,req:'アンサーシート未回答',dir:'darwin/①darwin_KTCHAN'},
-  {s:'12:30',e:'13:00',stage:'ROCKATERIA',name:'前髪ぱっつん少年',report:null,req:'アンサーシート未回答',dir:'ROCKATERIA/①ROCKATERIA_前髪ぱっつん少年'},
+  {s:'12:15',e:'12:45',stage:'darwin',name:'#KTCHAN',report:true,req:'特になし',dir:'darwin/①darwin_KTCHAN'},
+  {s:'12:30',e:'13:00',stage:'ROCKATERIA',name:'前髪ぱっつん少年',report:true,req:'特になし',dir:'ROCKATERIA/①ROCKATERIA_前髪ぱっつん少年'},
   {s:'12:45',e:'13:15',stage:'enn 3rd',name:'松室政哉',report:true,ng:'下からの煽りは避ける',dir:'enn 3rd/①enn3rd_松室政哉'},
   {s:'13:00',e:'13:30',stage:'Rensa',name:'らそんぶる',report:true,req:'Vo.Dr.を上手側から、Gt.Ba.を下手側からメインで',dir:'RENSA/②Rensa_らそんぶる'},
   {s:'13:15',e:'13:45',stage:'enn 2nd',name:'ORCALAND',report:true,req:'特になし',dir:'enn 2nd/②enn2nd_ORCALAND'},
@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530120134';
+const BUILD = '20260530120754';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
