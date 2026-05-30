@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530125523';
+const BUILD = '20260530125952';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -604,13 +604,28 @@ async function fetchSelected(){
   }catch(e){ /* 取得不可時は未選定表示のまま */ }
 }
 
-/* 投稿チェックの状態管理（localStorageに保存） */
+/* 投稿チェックの状態管理（localStorage＋公開posted.jsonをマージ） */
 const PKEY='smf2026_posts';
 function loadPosts(){ try{return JSON.parse(localStorage.getItem(PKEY))||{}}catch(e){return {}} }
 function savePosts(p){ localStorage.setItem(PKEY,JSON.stringify(p)); }
+let POSTED_STATUS={}; // posted.json（公開スナップショット）
+function mergedPosts(){
+  const local=loadPosts(), m={};
+  const ids=new Set([...Object.keys(POSTED_STATUS),...Object.keys(local)]);
+  ids.forEach(id=>{ m[id]={...(POSTED_STATUS[id]||{}),...(local[id]||{})}; }); // localが優先
+  return m;
+}
+async function fetchPosted(){
+  try{
+    const r=await fetch('posted.json?_='+new Date().getTime());
+    if(!r.ok) return;
+    POSTED_STATUS=await r.json();
+    applyPosts();
+  }catch(e){ /* 取得不可時はlocalStorageのみ */ }
+}
 
 function applyPosts(){
-  const p=loadPosts();
+  const p=mergedPosts();
   document.querySelectorAll('.post').forEach(el=>{
     const on = p[el.dataset.id] && p[el.dataset.id][el.dataset.sns];
     el.classList.toggle('on',!!on);
@@ -618,7 +633,7 @@ function applyPosts(){
   refreshPostedCards();
 }
 function refreshPostedCards(){
-  const p=loadPosts();
+  const p=mergedPosts();
   let nx=0,ng=0;
   const total=DATA.filter(d=>d.report===true).length;
   document.querySelectorAll('.card').forEach(c=>{
@@ -726,6 +741,8 @@ fetchDropbox();
 setInterval(fetchDropbox,15000); // 15秒ごとにDropbox格納状況を再取得
 fetchSelected();
 setInterval(fetchSelected,15000); // 15秒ごとに自動選定状況を再取得
+fetchPosted();
+setInterval(fetchPosted,15000); // 15秒ごとに公開投稿チェック状況を再取得
 </script>
 </body>
 </html>
