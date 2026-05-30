@@ -376,7 +376,7 @@ const toMin = t => +t.slice(0,2)*60 + +t.slice(3);
 /* ===== 自動更新（キャッシュ対策）=====
    デプロイ毎に BUILD が更新される。ページは version.txt を定期取得し、
    値が変わっていたらキャッシュを無視して最新を再読み込みする。 */
-const BUILD = '20260530132733';
+const BUILD = '20260530132920';
 async function checkUpdate(){
   try{
     const r = await fetch('version.txt?_='+new Date().getTime(), {cache:'no-store'});
@@ -750,6 +750,13 @@ fetchSelected();
 setInterval(fetchSelected,15000); // 15秒ごとに自動選定状況を再取得
 fetchPosted();
 setInterval(fetchPosted,15000); // 15秒ごとに公開投稿チェック状況を再取得
+
+/* スマホ対策：タブを表に出した/フォーカスした瞬間に最新を取得＆更新チェック
+   （モバイルはバックグラウンドのsetIntervalが止まるため） */
+function refreshAll(){ try{ checkUpdate(); fetchDropbox(); fetchSelected(); fetchPosted(); tick(); }catch(e){} }
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) refreshAll(); });
+window.addEventListener('focus', refreshAll);
+window.addEventListener('pageshow', refreshAll);
 </script>
 </body>
 </html>
